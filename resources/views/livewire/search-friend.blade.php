@@ -24,7 +24,7 @@
                             <div class="contact-info">
                                 <span class="contact-name">{{ $result->name }}</span>
                                 <span class="contact-status">
-                                    {{ $result->is_online ? 'Online' : 'Last seen ' . $result->last_seen_at?->diffForHumans() }}
+                                    {{ $result->is_online ? 'Online' : 'Offline' }}
                                 </span>
                             </div>
                         </div>
@@ -47,20 +47,7 @@
         <div class="contacts-list">
             @if (count(Auth::user()->friends) > 0)
                 @foreach (Auth::user()->friends as $friend)
-                    <a class="text-decoration-none" href="{{ route('front.chat', ['id' => $friend->id]) }}">
-                        <div class="search-user-info ms-3">
-                            <div class="contact-avatar">
-                                <img src="{{ getAvatar($friend->name) }}" alt="{{ $friend->name }}">
-                                <span class="status-indicator {{ $friend->is_online ? 'online' : 'offline' }}"></span>
-                            </div>
-                            <div class="contact-info">
-                                <span class="contact-name">{{ $friend->name }}</span>
-                                <span class="contact-status">
-                                    {{ $friend->is_online ? 'Online' : 'Last seen ' . $friend->last_seen_at?->diffForHumans() }}
-                                </span>
-                            </div>
-                        </div>
-                    </a>
+                    <livewire:friend-list :friend="$friend" />
                 @endforeach
             @else
                 <div class="empty-state">

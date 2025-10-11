@@ -18,6 +18,10 @@ class SearchFriend extends Component
             'user_id' => Auth::user()->id,
             'friend_id' => $friendId,
         ]);
+        Friend::firstOrCreate([
+            'user_id' => $friendId,
+            'friend_id' => Auth::user()->id,
+        ]);
         $this->reset('query');
     }
     public function isFriend($friend)

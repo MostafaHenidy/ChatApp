@@ -18,7 +18,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $guarded = ['id'];
-
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'last_seen_at' => 'datetime',
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

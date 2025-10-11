@@ -1,7 +1,7 @@
 <div>
     <main class="main-content">
-        {{-- <livewire:user-info :user="$friend" /> --}}
-        <div class="chat-header">
+        <livewire:user-info :user="$friend" />
+        {{-- <div class="chat-header">
             <img src="{{ getAvatar($friend->name) }}" alt="{{ $friend->name }}" class="chat-avatar">
             <div class="chat-details">
                 <h3 class="chat-name">{{ $friend->name }}</h3>
@@ -15,7 +15,7 @@
                     </span>
                 @endif
             </div>
-        </div>
+        </div> --}}
 
         <div class="messages-container" id="messagesContainer">
             <div class="messages-list" id="messagesList">

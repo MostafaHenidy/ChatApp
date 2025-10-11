@@ -8,15 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Collection; // Keep Collection type-hint for stability
+use Livewire\Attributes\On;
 
 class ChatMessages extends Component
 {
     public $friend;
     public $messages;
     public $body;
+
     public function sendMessage()
     {
-        // dd($this->friend);
         $message = Message::create([
             'sender_id' => Auth::user()->id,
             'receiver_id' => $this->friend->id,

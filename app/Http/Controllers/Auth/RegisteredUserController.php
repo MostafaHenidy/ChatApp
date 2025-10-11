@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserUpdateStatus;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -41,11 +42,11 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        broadcast(new UserUpdateStatus($user));
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('index', absolute: false));
+        return redirect(route('front.index', absolute: false));
     }
 }
