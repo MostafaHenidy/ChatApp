@@ -24,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     @livewireScripts
-    <script>
+    {{-- <script>
         // Enable pusher logging - don't include this in production
         Pusher.logToConsole = true;
 
@@ -32,14 +32,23 @@
             cluster: 'eu'
         });
 
-        var channel = pusher.subscribe('UserStatus');
-
-        // Use the corrected event name
-        channel.bind('UserUpdateStatus', function(data) {
-            console.log("Pusher event received, dispatching Livewire event:", JSON.stringify(data));
-            Livewire.dispatch('userStatusUpdated');
+        // var channel = pusher.subscribe('UserStatus');
+        // channel.bind('UserUpdateStatus', function(data) {
+        //     console.log("userUpdateStatus event received, dispatching Livewire event:", JSON.stringify(data));
+        //     Livewire.dispatch('userStatusUpdated');
+        // });
+        var conversationId = "{{ $message->conversation_id }}";
+        var privateChannel = pusher.subscribe(`private-chat.${conversationId}`);
+        privateChannel.bind("UserSendMessage", function(data) {
+            console.log(
+                "MessageSent event received, dispatching Livewire event:",
+                data
+            );
+            Livewire.dispatch("userSendMessage", {
+                messageData: data.message,
+            });
         });
-    </script>
+    </script> --}}
 </body>
 
 </html>

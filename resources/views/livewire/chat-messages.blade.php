@@ -1,22 +1,6 @@
 <div>
     <main class="main-content">
         <livewire:user-info :user="$friend" />
-        {{-- <div class="chat-header">
-            <img src="{{ getAvatar($friend->name) }}" alt="{{ $friend->name }}" class="chat-avatar">
-            <div class="chat-details">
-                <h3 class="chat-name">{{ $friend->name }}</h3>
-                @if ($friend->is_online)
-                    <span class="chat-status online">
-                        <span class="status-dot online"></span> Online
-                    </span>
-                @else
-                    <span class="chat-status offline">
-                        <span class="status-dot offline"></span> Offline
-                    </span>
-                @endif
-            </div>
-        </div> --}}
-
         <div class="messages-container" id="messagesContainer">
             <div class="messages-list" id="messagesList">
                 @foreach ($messages as $message)
@@ -70,3 +54,27 @@
         </div>
     </main>
 </div>
+<script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+<script>
+    var conversationId = "{{ $this->conversation->id }}";
+    console.log("Subscribing to private-chat." + conversationId);
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('1e3de166ddf77ccc701a', {
+        cluster: 'eu',
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }
+    });
+    var privateChannel = pusher.subscribe(`private-chat.${conversationId}`);
+    privateChannel.bind('UserSendMessage', function(data) {
+        console.log('Pusher event received:', data);
+        Livewire.dispatch('userSendMessage', {
+            messageData: data.message
+        });
+    });
+</script>

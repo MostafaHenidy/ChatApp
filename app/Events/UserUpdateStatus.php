@@ -34,10 +34,10 @@ class UserUpdateStatus implements ShouldBroadcast
             new Channel('UserStatus'),
         ];
     }
-    // public function broadcastAs()
-    // {
-    //     return 'UserUpdateStatus';
-    // }
+    public function broadcastAs()
+    {
+        return 'UserUpdateStatus';
+    }
 
     public function broadcastWith()
     {

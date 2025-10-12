@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,3 +22,10 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+/**
+ * Broadcast Authorization Route
+ * * This line registers the /broadcasting/auth endpoint required by Laravel Echo 
+ * (and Pusher) to authorize private and presence channels.
+ * It must be placed outside of any API middleware group.
+ */
+Broadcast::routes(['middleware' => ['auth']]);

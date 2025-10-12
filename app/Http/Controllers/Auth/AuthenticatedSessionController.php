@@ -33,7 +33,8 @@ class AuthenticatedSessionController extends Controller
             'is_online' => true,
             'last_seen_at' => null,
         ]);
-        broadcast(new UserUpdateStatus($user));
+        event(new UserUpdateStatus($user));
+        // broadcast(new UserUpdateStatus($user));
         return redirect()->intended(route('front.index', absolute: false));
     }
 
@@ -47,7 +48,7 @@ class AuthenticatedSessionController extends Controller
             'is_online' => false,
             'last_seen_at' => now(),
         ]);
-        broadcast(new UserUpdateStatus($user));
+        event(new UserUpdateStatus($user));
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
