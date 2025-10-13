@@ -16,7 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('front.profile', [
             'user' => $request->user(),
         ]);
     }
@@ -33,7 +33,8 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
-
+        $request->user()->clearMediaCollection('avatars');
+        $request->user()->addMedia($request->file('avatar'))->toMediaCollection('avatars','public');
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
