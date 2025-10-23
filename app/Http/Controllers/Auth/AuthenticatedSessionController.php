@@ -34,7 +34,6 @@ class AuthenticatedSessionController extends Controller
             'last_seen_at' => null,
         ]);
         event(new UserUpdateStatus($user));
-        // broadcast(new UserUpdateStatus($user));
         return redirect()->intended(route('front.index', absolute: false));
     }
 

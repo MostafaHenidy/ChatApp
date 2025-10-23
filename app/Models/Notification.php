@@ -9,10 +9,10 @@ class Notification extends Model
     protected $guarded = ['id'];
     public function sender()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'sender_id');
     }
     public function receiver()
     {
-        $this->hasMany(User::class);
+        return $this->belongsTo(User::class, 'receiver_id');
     }
 }

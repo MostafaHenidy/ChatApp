@@ -18,3 +18,8 @@ Broadcast::channel('chat.{conversation_id}', function ($user, $conversationId) {
     }
     return false;
 });
+
+// Authorize private notification channel for the targeted user id
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});

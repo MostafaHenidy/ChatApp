@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Livewire;
-
+use App\Notifications\UserSentMessage;
 use App\Events\UserSendMessage;
 use App\Models\Conversation;
 use App\Models\Message;
@@ -33,9 +33,7 @@ class ChatMessages extends Component
     #[On('userSendMessage')]
     public function refreshMessages($messageData)
     {
-        $this->messages = Message::where('conversation_id', $this->conversation->id)
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $this->messages = Message::where('conversation_id', $this->conversation->id)->orderBy('created_at', 'asc')->get();
     }
     public function sendMessage()
     {
@@ -52,15 +50,16 @@ class ChatMessages extends Component
             'body' => $this->body,
             'conversation_id' => $this->conversation->id,
         ]);
-
         event(new UserSendMessage($message));
+
+        // Send notification safely
+        $this->friend->notify(new UserSentMessage($message, Auth::user()));
+
         $this->reset('body');
     }
     public function render()
     {
-        $this->messages = Message::where('conversation_id', $this->conversation->id)
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $this->messages = Message::where('conversation_id', $this->conversation->id)->orderBy('created_at', 'asc')->get();
         return view('livewire.chat-messages');
     }
 }

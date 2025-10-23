@@ -9,11 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
+use App\Models\Group;
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes;
+    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes, notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -31,10 +31,7 @@ class User extends Authenticatable implements HasMedia
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Get the attributes that should be cast.
@@ -50,19 +47,34 @@ class User extends Authenticatable implements HasMedia
     }
     public function friends()
     {
-        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
     }
 
     public function friendOf()
     {
-        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')->withTimestamps();
     }
 
     // Merge both directions
     public function allFriends()
     {
         return $this->friends->merge($this->friendOf);
+    }
+    /**
+     * Groups created by this user (owner/creator)
+     */
+    public function groups()
+    {
+        return $this->hasMany(Group::class, 'created_by');
+    }
+
+    /**
+     * Groups where the user is a member (via group_members pivot)
+     */
+    public function memberGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')
+            ->withPivot('is_admin')
+            ->withTimestamps();
     }
 }

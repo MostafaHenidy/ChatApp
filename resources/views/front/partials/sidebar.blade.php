@@ -26,7 +26,8 @@
                         </a>
                     </li>
                     <li>
-                        <button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#NotificationsModal">
                             <i class="bi bi-bell"></i>
                             <span>Notifications</span>
                         </button>
@@ -44,24 +45,6 @@
                 </ul>
             </nav>
         </label>
-        {{-- <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Profile<i class="bi bi-person-circle"></i></a></li>
-                <li>
-                    <form method="POST" action="{{ route('logout') }}" class="logout-form dropdown-item">
-                        @csrf
-                        <button type="submit" class="btn-icon" title="Sign out">Logout
-                            <i class="bi bi-box-arrow-right"></i>
-                        </button>
-                    </form>
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-        </div> --}}
-
     </div>
 
     <div class="sidebar-content">
@@ -69,32 +52,24 @@
         <div class="sidebar-section">
             <div class="section-header">
                 <h4 class="section-title">Groups</h4>
-                {{-- <a href="{{ route('groups.create') }}" class="btn-icon" title="Create group">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </a> --}}
-            </div>
-            <div class="contacts-list">
-                {{-- @forelse($groups as $group)
-                            <a href="{{ route('chat', ['type' => 'group', 'id' => $group->id]) }}"
-                                class="contact-item {{ $chatData['type'] === 'group' && $chatData['id'] == $group->id ? 'active' : '' }}">
-                                <div class="contact-avatar">
-                                    <img src="{{ $group->avatar_url }}" alt="{{ $group->name }}">
-                                </div>
-                                <div class="contact-info">
-                                    <span class="contact-name">{{ $group->name }}</span>
-                                    <span class="contact-status">{{ $group->members->count() }} members</span>
-                                </div>
-                            </a>
-                        @empty
-                            <div class="empty-state">
-                                <p>No groups yet</p>
+                <livewire:group />
+                <div class="contacts-list">
+                    @forelse(Auth::user()->groups as $group)
+                        <a href="#">
+                            <div class="contact-avatar">
+                                <img src="{{ getAvatar($group->name) }}" alt="{{ $group->name }}">
                             </div>
-                        @endforelse --}}
+                            <div class="contact-info">
+                                <span class="contact-name">{{ $group->name }}</span>
+                                <span class="contact-status">{{ $group->members->count() }} members</span>
+                            </div>
+                        </a>
+                    @empty
+                        <div class="empty-state">
+                            <p>No groups yet</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
-    </div>
 </aside>
