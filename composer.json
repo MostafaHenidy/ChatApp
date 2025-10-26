@@ -15,7 +15,7 @@
         "laravolt/avatar": "^6.3",
         "livewire/livewire": "^3.6",
         "pusher/pusher-php-server": "^7.2",
-        "spatie/laravel-medialibrary": "^11.15",
+        "spatie/laravel-medialibrary": "^11.17",
         "spatie/laravel-sluggable": "^3.7"
     },
     "require-dev": {

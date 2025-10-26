@@ -45,8 +45,8 @@
             <h4 class="section-title">Direct Messages</h4>
         </div>
         <div class="contacts-list">
-            @if (count(Auth::user()->friends) > 0)
-                @foreach (Auth::user()->friends as $friend)
+            @if (count($this->friends) > 0)
+                @foreach ($this->friends as $friend)
                     <livewire:friend-list :friend="$friend" />
                 @endforeach
             @else

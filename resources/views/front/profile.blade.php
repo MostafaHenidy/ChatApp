@@ -185,13 +185,13 @@
             // Add active class to clicked nav tab
             event.target.classList.add('active');
         }
-        // Handle camera click -> open file dialog
+        // Handle camera button click → open file dialog
         document.getElementById('changeAvatarBtn').addEventListener('click', function() {
-            document.getElementById('avatarUpload').click();
+            document.getElementById('avatar').click();
         });
 
-        // Preview selected image
-        document.getElementById('avatarUpload').addEventListener('change', function(event) {
+        // Preview selected image (works for the same input)
+        document.getElementById('avatar').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();

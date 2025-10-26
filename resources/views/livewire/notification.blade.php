@@ -28,7 +28,6 @@
 </div>
 <script>
     Pusher.logToConsole = true;
-
     const pusher = new Pusher("{{ config('broadcasting.connections.pusher.key') }}", {
         cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
         authEndpoint: "/broadcasting/auth",

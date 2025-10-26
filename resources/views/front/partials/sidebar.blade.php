@@ -17,7 +17,6 @@
                 <span></span>
             </div>
             <nav class="popup-window">
-                {{-- <legend>Actions</legend> --}}
                 <ul>
                     <li>
                         <a class="text-decoration-none" href="{{ route('profile.edit') }}">
@@ -53,23 +52,43 @@
             <div class="section-header">
                 <h4 class="section-title">Groups</h4>
                 <livewire:group />
-                <div class="contacts-list">
-                    @forelse(Auth::user()->groups as $group)
-                        <a href="#">
-                            <div class="contact-avatar">
-                                <img src="{{ getAvatar($group->name) }}" alt="{{ $group->name }}">
+            </div>
+            <div class="contacts-list">
+                @php
+                    $groups = Auth::user()
+                        ->groups->merge(Auth::user()->memberGroups)
+                        ->unique('id');
+                @endphp
+                @forelse($groups as $group)
+                    <a class='text-decoration-none ms-3 {{ request()->routeIs('front.group') && request()->id == $group->id ? 'active' : '' }}'
+                        href="{{ route('front.group', ['id' => $group->id]) }}">
+                        <div class="user-info">
+                            <img src="{{ getAvatar(strtoupper($group->name)) }}" alt="{{ $group->name }}"
+                                class="user-avatar">
+                            <div class="user-details">
+                                <span class="user-name">{{ $group->name }}</span>
+                                <span class="user-status">{{ $group->members->count() }} members</span>
                             </div>
-                            <div class="contact-info">
-                                <span class="contact-name">{{ $group->name }}</span>
-                                <span class="contact-status">{{ $group->members->count() }} members</span>
-                            </div>
-                        </a>
-                    @empty
-                        <div class="empty-state">
-                            <p>No groups yet</p>
                         </div>
-                    @endforelse
-                </div>
+                    </a>
+                @empty
+                    <div class="empty-state">
+                        <p>No groups yet</p>
+                    </div>
+                @endforelse
             </div>
         </div>
+        <style>
+            a.active .user-info {
+                background-color: #e5edf5;
+                border-radius: 10px;
+                transition: 0.2s ease;
+                padding: 5px;
+            }
+
+            a.active .user-name {
+                font-weight: 600;
+                color: #007bff;
+            }
+        </style>
 </aside>

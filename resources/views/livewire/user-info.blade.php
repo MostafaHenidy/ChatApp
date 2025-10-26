@@ -1,4 +1,4 @@
-<div class="chat-header">
+<div class="chat-header friend">
     <img src="{{ getAvatar($user->name) }}" alt="{{ $user->name }}" class="chat-avatar">
     <div class="chat-details">
         <h3 class="chat-name">{{ $user->name }}</h3>

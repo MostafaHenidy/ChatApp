@@ -13,6 +13,8 @@ Route::group([
     Route::controller(UserController::class)->group(function () {
         route::get('/', 'index')->name('index');
         route::get('/chat/{id}', 'chat')->name('chat');
+        route::get('/group/{id}', 'group')->name('group');
+        route::get('/group/{id}/groupManagement', 'groupManagement')->name('groupManagement');
     });
 });
 Route::middleware('auth')->group(function () {
@@ -22,10 +24,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
-/**
- * Broadcast Authorization Route
- * * This line registers the /broadcasting/auth endpoint required by Laravel Echo 
- * (and Pusher) to authorize private and presence channels.
- * It must be placed outside of any API middleware group.
- */
 Broadcast::routes(['middleware' => ['auth']]);

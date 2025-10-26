@@ -49,12 +49,13 @@ class ChatMessages extends Component
             'receiver_id' => $this->friend->id,
             'body' => $this->body,
             'conversation_id' => $this->conversation->id,
+            'group_id' => null ,
         ]);
-        event(new UserSendMessage($message));
+        broadcast(new UserSendMessage($message))->toOthers();
 
         // Send notification safely
         $this->friend->notify(new UserSentMessage($message, Auth::user()));
-
+        $this->dispatch('refreshFriendList');
         $this->reset('body');
     }
     public function render()

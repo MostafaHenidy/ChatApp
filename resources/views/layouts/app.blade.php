@@ -26,7 +26,7 @@
     @livewireScripts
     <script>
         // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
 
         var pusher = new Pusher('1e3de166ddf77ccc701a', {
             cluster: 'eu'

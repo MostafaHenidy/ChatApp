@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Group;
+use Illuminate\Support\Facades\Auth;
+
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -73,8 +75,17 @@ class User extends Authenticatable implements HasMedia
      */
     public function memberGroups()
     {
-        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')
-            ->withPivot('is_admin')
-            ->withTimestamps();
+        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')->withPivot('is_admin')->withTimestamps();
+    }
+    public function getLastMessageAttribute()
+    {
+        return Message::where(function ($query) {
+            $query->where('sender_id', Auth::id())->where('receiver_id', $this->id);
+        })
+            ->orWhere(function ($query) {
+                $query->where('sender_id', $this->id)->where('receiver_id', Auth::id());
+            })
+            ->latest()
+            ->first();
     }
 }

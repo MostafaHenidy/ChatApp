@@ -30,13 +30,12 @@ class Group extends Component
             'selectedFriends' => 'required|array|min:1',
         ]);
 
-        $group = \App\Models\Group::create([
+        $group = Group::create([
             'name' => $this->name,
-            'slug' => \Str::slug($this->name),
-            'created_by' => auth()->id(),
+            'created_by' => Auth::user()->id,
         ]);
 
-        $group->members()->attach(array_merge($this->selectedFriends, [auth()->id()]));
+        $group->members()->attach(array_merge($this->selectedFriends, [Auth::user()->id]));
 
         session()->flash('success', 'Group created successfully!');
         $this->reset(['name', 'selectedFriends']);

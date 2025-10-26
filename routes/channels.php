@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Conversation;
+use App\Models\Group;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 // Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
@@ -15,6 +17,14 @@ Broadcast::channel('chat.{conversation_id}', function ($user, $conversationId) {
     $userId = (string) $user->id;
     if (in_array($userId, $participatIds)) {
         return true;
+    }
+    return false;
+});
+Broadcast::channel('presence-chat.{group_id}', function ($user, $groupId) {
+    $group = Group::findOrFail($groupId);
+    if (!$group) return false;
+    if ($group->members->pluck('id')->contains($user->id)) {
+        return ['id' => $user->id, 'name' => $user->name];
     }
     return false;
 });
