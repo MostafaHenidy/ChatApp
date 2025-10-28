@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Models\Group as ModelsGroup;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+
 class Group extends Component
 {
     public $name;
@@ -30,16 +32,17 @@ class Group extends Component
             'selectedFriends' => 'required|array|min:1',
         ]);
 
-        $group = Group::create([
+        $group = ModelsGroup::create([
             'name' => $this->name,
-            'created_by' => Auth::user()->id,
+            'created_by' => Auth::id(),
         ]);
 
-        $group->members()->attach(array_merge($this->selectedFriends, [Auth::user()->id]));
+        $group->members()->attach($this->selectedFriends);
+        $group->members()->attach(Auth::id(), ['is_admin' => true]);
 
         session()->flash('success', 'Group created successfully!');
         $this->reset(['name', 'selectedFriends']);
-        $this->dispatch('groupCreated'); // optional event
+        $this->dispatch('groupCreated');
     }
 
     public function render()

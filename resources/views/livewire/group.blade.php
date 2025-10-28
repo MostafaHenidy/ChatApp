@@ -59,5 +59,22 @@
             </div>
         </div>
     </div>
+    <script>
+        window.addEventListener('groupCreated', () => {
+            const modalElement = document.getElementById('addGroupModal');
+            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
 
+            // Properly hide the modal
+            modal.hide();
+
+            // Manually remove the backdrop if it remains
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+
+            // Re-enable body scrolling and interaction
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        });
+    </script>
 </div>

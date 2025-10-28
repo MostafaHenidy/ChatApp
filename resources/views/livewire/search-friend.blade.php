@@ -43,16 +43,27 @@
         </div>
         <div class="section-header">
             <h4 class="section-title">Direct Messages</h4>
+            <label class="checkbox-container">
+                <input type="checkbox" wire:model.live="checkboxChecked">
+                <div class="line"></div>
+                <div class="line line-indicator"></div>
+            </label>
         </div>
         <div class="contacts-list">
-            @if (count($this->friends) > 0)
-                @foreach ($this->friends as $friend)
-                    <livewire:friend-list :friend="$friend" />
-                @endforeach
-            @else
+            @if ($checkboxChecked)
                 <div class="empty-state">
-                    <p>there is no friends</p>
+                    <p>Friends hidden</p>
                 </div>
+            @else
+                @if ($friends->isNotEmpty())
+                    @foreach ($friends as $friend)
+                        <livewire:friend-list :friend="$friend" :key="$friend->id" />
+                    @endforeach
+                @else
+                    <div class="empty-state">
+                        <p>There are no friends</p>
+                    </div>
+                @endif
             @endif
         </div>
     </div>
@@ -124,6 +135,49 @@
         .micButton:hover {
             background-color: rgb(255, 230, 230);
             transition-duration: 0.3s;
+        }
+    </style>
+    <style>
+        .checkbox-container input {
+            opacity: 0;
+            cursor: pointer;
+            width: 0;
+            height: 0;
+        }
+
+        .checkbox-container {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            font-size: 5px;
+            user-select: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            background: rgba(216, 216, 216, 0.603);
+        }
+
+        .checkbox-container:hover {
+            background: rgba(197, 197, 197, 0.527);
+        }
+
+        .line {
+            width: calc(100% - 8px);
+            height: 3px;
+            left: 4px;
+            background: rgb(58, 58, 58);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: .7s transform cubic-bezier(0, 1, .33, 1.2), background .4s;
+        }
+
+        .line-indicator {
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        .checkbox-container input:checked~.line-indicator {
+            transform: translateY(-50%);
         }
     </style>
 </div>

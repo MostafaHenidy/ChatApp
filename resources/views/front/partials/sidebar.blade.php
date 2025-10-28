@@ -5,7 +5,11 @@
                 <img src="{{ getAvatar(auth()->user()->name) }}" alt="{{ auth()->user()->name }}" class="user-avatar">
                 <div class="user-details">
                     <h3 class="user-name">{{ auth()->user()->name }}</h3>
-                    <span class="user-status online">Online</span>
+                    @if (auth()->user()->is_online)
+                        <span class="user-status online">Online</span>
+                    @else
+                        <span class="user-status offline">Offline</span>
+                    @endif
                 </div>
             </div>
         </a>
@@ -45,7 +49,6 @@
             </nav>
         </label>
     </div>
-
     <div class="sidebar-content">
         @livewire('search-friend')
         <div class="sidebar-section">
@@ -78,17 +81,18 @@
                 @endforelse
             </div>
         </div>
-        <style>
-            a.active .user-info {
-                background-color: #e5edf5;
-                border-radius: 10px;
-                transition: 0.2s ease;
-                padding: 5px;
-            }
+    </div>
+    <style>
+        a.active .user-info {
+            background-color: #e5edf5;
+            border-radius: 10px;
+            transition: 0.2s ease;
+            padding: 5px;
+        }
 
-            a.active .user-name {
-                font-weight: 600;
-                color: #007bff;
-            }
-        </style>
+        a.active .user-name {
+            font-weight: 600;
+            color: #007bff;
+        }
+    </style>
 </aside>

@@ -5,6 +5,7 @@
         @csrf
     </form>
     <div class="container">
+        <a href="{{ route('front.index') }}" class="return-home"><i class="bi bi-arrow-left-short"></i></a>
         <!-- Profile Header -->
         <div class="profile-header">
             <div class="avatar-wrapper position-relative d-inline-block">
@@ -168,6 +169,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // Simple tab switching with vanilla JS
         function switchTab(tabName) {

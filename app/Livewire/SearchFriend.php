@@ -15,6 +15,7 @@ class SearchFriend extends Component
     public $query = '';
     public $friends;
     public $messages;
+    public $checkboxChecked = false;
     public function mount()
     {
         $this->loadFriends();
@@ -54,6 +55,7 @@ class SearchFriend extends Component
             'user_id' => $friendId,
             'friend_id' => Auth::user()->id,
         ]);
+        $this->dispatch('refreshFriendList');
         $this->reset('query');
     }
     public function isFriend($friend)
