@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Notifications\UserSentMessage;
 use App\Events\UserSendMessage;
 use App\Models\Conversation;
@@ -49,12 +50,10 @@ class ChatMessages extends Component
             'receiver_id' => $this->friend->id,
             'body' => $this->body,
             'conversation_id' => $this->conversation->id,
-            'group_id' => null ,
+            'group_id' => null,
         ]);
         broadcast(new UserSendMessage($message))->toOthers();
-
-        // Send notification safely
-        $this->friend->notify(new UserSentMessage($message, Auth::user()));
+        $this->friend->notify(new UserSentMessage(Auth::user(), $message));
         $this->dispatch('refreshFriendList');
         $this->reset('body');
     }

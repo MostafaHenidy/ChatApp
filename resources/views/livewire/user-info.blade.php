@@ -1,15 +1,13 @@
 <div class="chat-header friend">
-    <img src="{{ getAvatar($user->name) }}" alt="{{ $user->name }}" class="chat-avatar">
-    <div class="chat-details">
-        <h3 class="chat-name">{{ $user->name }}</h3>
-        @if ($user->is_online)
-            <span class="chat-status online">
-                <span class="status-dot online"></span> Online
-            </span>
-        @else
-            <span class="chat-status offline">
-                <span class="status-dot offline"></span> Offline
-            </span>
-        @endif
+    <div class="avatar-wrapper position-relative">
+        <img class="group-avatar" src="{{ getAvatar(strtoupper($user->name)) }}" alt="{{ $user->name }}">
+        <span class="status-dot {{ $user->is_online ? 'online' : 'offline' }}"></span>
+    </div>
+    <div>
+        <h6 class="group-name">
+            {{ $user->name }}
+        </h6>
+        <span
+            class="user-status {{ $user->is_online ? 'online' : 'offline' }}">{{ $user->is_online ? 'Online' : 'Offline' }}</span>
     </div>
 </div>
