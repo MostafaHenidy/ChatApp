@@ -1,45 +1,34 @@
 <div>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn add-group-btn" data-bs-toggle="modal" data-bs-target="#addGroupModal">
-        <i class="bi bi-plus-circle-fill"></i>
-    </button>
-
     <!-- Modal -->
-    <div wire:ignore.self class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        <i class="bi bi-people-fill me-2"></i>
-                        Create Group
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form wire:submit.prevent="createGroup">
-                    <div class="modal-body">
-                        <label class="form-label mb-2" for="name">Group Name</label>
-                        <input class="form-control" type="text" name="name" wire:model="name">
-
+    <div wire:ignore.self class="brutalist-modal-overlay" id="addGroupModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="brutalist-modal">
+            <div class="brutalist-modal__header">
+                <h1 class="modal-title fs-5"><i class="bi bi-people-fill me-2"></i>Create Group</h1>
+                <button type="button" class="brutalist-btn brutalist-btn--sm brutalist-icon " data-modal-close=""
+                    aria-label="Close"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <form wire:submit.prevent="createGroup">
+                <div class="brutalist-modal__body">
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label" for="name">Group Name</label>
+                        <input class="brutalist-input" type="text" name="name" wire:model="name">
+                    </div>
+                    <div class="brutalist-sidebar__contacts-list">
                         @foreach ($this->friends as $friend)
-                            <div class="d-flex align-items-center justify-content-between mt-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="contact-avatar me-2">
-                                        <img src="{{ getAvatar($friend->name) }}" alt="{{ $friend->name }}">
+                            <div class="brutalist-user-info brutalist-flex brutalist-flex--between">
+                                <div class="brutalist-flex brutalist-flex--center">
+                                    <img class="brutalist-user-info__avatar" src="{{ getAvatar($friend->name) }}"
+                                        alt="{{ $friend->name }}">
+                                    <div class="brutalist-user-info__details">
+                                        <span class="brutalist-user-info__name">{{ $friend->name }}</span>
                                         <span
-                                            class="status-indicator {{ $friend->is_online ? 'online' : 'offline' }}"></span>
-                                    </div>
-                                    <div class="contact-info">
-                                        <span class="contact-name d-block">{{ $friend->name }}</span>
-                                        <span class="contact-status text-muted small">
+                                            class="brutalist-user-info__status brutalist-user-info__status--{{ $friend->is_online ? 'online' : 'offline' }}">
                                             {{ $friend->is_online ? 'online' : 'offline' }}
                                         </span>
                                     </div>
                                 </div>
-
-                                <!-- Icon button acts as checkbox -->
-                                <button type="button" class="btn border-0 bg-transparent p-0"
+                                <button type="button" class="brutalist-btn brutalist-btn--icon"
                                     wire:click.stop="toggleFriend({{ $friend->id }})">
                                     @if (in_array($friend->id, $selectedFriends))
                                         <i class="bi bi-person-check-fill text-primary fs-5"></i>
@@ -50,31 +39,19 @@
                             </div>
                         @endforeach
                     </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="brutalist-modal__footer">
+                    <button type="button" class="brutalist-btn brutalist-btn--secondary"
+                        data-modal-close="">Cancel</button>
+                    <button type="submit" class="brutalist-btn">Create</button>
+                </div>
+            </form>
         </div>
     </div>
     <script>
         window.addEventListener('groupCreated', () => {
             const modalElement = document.getElementById('addGroupModal');
-            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-
-            // Properly hide the modal
-            modal.hide();
-
-            // Manually remove the backdrop if it remains
-            const backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(backdrop => backdrop.remove());
-
-            // Re-enable body scrolling and interaction
-            document.body.classList.remove('modal-open');
-            document.body.style.removeProperty('overflow');
-            document.body.style.removeProperty('padding-right');
+            modalElement.classList.remove('active');
         });
     </script>
 </div>

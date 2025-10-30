@@ -2,44 +2,30 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Group;
+use App\Models\Message;
 
 class User extends Authenticatable implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes, notifiable;
+    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $guarded = ['id'];
+
+    protected $hidden = ['password', 'remember_token'];
+
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'last_seen_at' => 'datetime',
     ];
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,6 +33,10 @@ class User extends Authenticatable implements HasMedia
             'password' => 'hashed',
         ];
     }
+
+    /** ----------------------------
+     *  FRIEND RELATIONSHIPS
+     * ---------------------------- */
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
@@ -57,33 +47,52 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')->withTimestamps();
     }
 
-    // Merge both directions
     public function allFriends()
     {
+        // Access as properties (collections), not relations
         return $this->friends->merge($this->friendOf);
     }
-    /**
-     * Groups created by this user (owner/creator)
-     */
+
+    /** ----------------------------
+     *  GROUP RELATIONSHIPS
+     * ---------------------------- */
+
+    // Groups created by this user
     public function groups()
     {
         return $this->hasMany(Group::class, 'created_by');
     }
 
-    /**
-     * Groups where the user is a member (via group_members pivot)
-     */
+    // Groups where the user is a member
     public function memberGroups()
     {
-        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')->withPivot('is_admin')->withTimestamps();
+        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')
+            ->withPivot('is_admin')
+            ->withTimestamps();
     }
+
+    public function allGroups()
+    {
+        // Use property access to get collections, not relations
+        $createdGroups = $this->groups;       // ✅ returns a Collection
+        $joinedGroups  = $this->memberGroups; // ✅ returns a Collection
+
+        // Merge both collections and remove duplicates
+        return $createdGroups->merge($joinedGroups)->unique('id')->values();
+    }
+
+    /** ----------------------------
+     *  MESSAGES
+     * ---------------------------- */
     public function getLastMessageAttribute()
     {
         return Message::where(function ($query) {
-            $query->where('sender_id', Auth::id())->where('receiver_id', $this->id);
+            $query->where('sender_id', Auth::id())
+                ->where('receiver_id', $this->id);
         })
             ->orWhere(function ($query) {
-                $query->where('sender_id', $this->id)->where('receiver_id', Auth::id());
+                $query->where('sender_id', $this->id)
+                    ->where('receiver_id', Auth::id());
             })
             ->latest()
             ->first();

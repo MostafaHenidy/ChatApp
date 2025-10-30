@@ -1,49 +1,44 @@
-<div>
-    <main class="main-content">
-        <livewire:user-info :user="$friend" />
-        <div class="messages-container" id="messagesContainer">
-            <div class="messages-list" id="messagesList">
-                @foreach ($messages as $message)
-                    <div class="message {{ $message->sender_id === auth()->id() ? 'sent' : 'received' }}"
-                        data-message-id="{{ $message->id }}">
-                        @if ($message->sender_id !== auth()->id())
-                            <img src="{{ getAvatar($message->sender->name) }}" alt="{{ $message->sender->name }}"
-                                class="message-avatar">
-                        @endif
-                        <div class="message-content">
-                            <div class="message-bubble">
-                                @if ($message->body)
-                                    <p class="message-text">{{ $message->body }}</p>
-                                @endif
-                            </div>
-                            <div class="message-meta">
-                                <span class="message-time">{{ $message->created_at->format('H:i') }}</span>
-                            </div>
+<div class="brutalist-chat">
+    <livewire:user-info :user="$friend" />
+    <div class="brutalist-chat__messages" id="messagesContainer">
+        <div id="messagesList">
+            @foreach ($messages as $message)
+                <div class="brutalist-message {{ $message->sender_id === auth()->id() ? 'brutalist-message--user' : '' }}"
+                    data-message-id="{{ $message->id }}">
+                    @if ($message->sender_id !== auth()->id())
+                        <img src="{{ getAvatar($message->sender->name) }}" alt="{{ $message->sender->name }}"
+                            class="brutalist-user-info__avatar">
+                    @endif
+                    <div class="brutalist-message__content">
+                        <div class="brutalist-message__bubble">
+                            @if ($message->body)
+                                {{ $message->body }}
+                            @endif
+                        </div>
+                        <div class="brutalist-helper-text">
+                            <span>{{ $message->created_at->format('H:i') }}</span>
                         </div>
                     </div>
-                @endforeach
-            </div>
-        </div>
-        <div class="message-input-container">
-            <form id="messageForm" wire:submit ='sendMessage' class="message-form" enctype="multipart/form-data">
-                <div class="message-input">
-                    <input type="text" wire:model ='body' name="body" id="messageInput"
-                        placeholder="Type a message..." autocomplete="off">
                 </div>
-
-                <button type="submit" class="btn-send" id="sendButton">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
-                    </svg>
-                    <div wire:loading class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden"></span>
-                    </div>
-                </button>
-            </form>
+            @endforeach
         </div>
-    </main>
+    </div>
+    <form id="messageForm" wire:submit="sendMessage" enctype="multipart/form-data">
+        <div class="brutalist-chat__input-area">
+            <input type="text" wire:model="body" name="body" id="messageInput" placeholder="Type a message..."
+                autocomplete="off" class="brutalist-chat__input">
+            <button type="submit" class="brutalist-btn" id="sendButton">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                </svg>
+                <div wire:loading class="brutalist-spinner" role="status">
+                    <span class="visually-hidden"></span>
+                </div>
+            </button>
+        </div>
+    </form>
 </div>
 <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 <script>

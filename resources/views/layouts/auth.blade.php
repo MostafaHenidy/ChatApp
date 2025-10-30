@@ -8,20 +8,22 @@
     <title>{{ config('app.name', 'Chat App') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('front-assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('front-assets/css/brutalist.css') }}">
 </head>
 
-<body class="auth-body">
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <h1 class="auth-title">{{ config('app.name', 'Chat App') }}</h1>
+<body>
+    <div class="brutalist-container">
+        <div class="brutalist-card">
+            <div class="brutalist-card__header">
+                <h1>{{ config('app.name', 'Chat App') }}</h1>
                 <p class="auth-subtitle">@yield('subtitle')</p>
             </div>
-            @yield('content')
+            <div class="brutalist-card__body">
+                @yield('content')
+            </div>
         </div>
     </div>
-    <script src="{{ asset('front-assets/js/app.js') }}"></script>
+    <script src="{{ asset('front-assets/js/brutalist.js') }}"></script>
 </body>
 
 </html>

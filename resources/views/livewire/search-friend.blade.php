@@ -1,57 +1,54 @@
 <div>
-    <div class="sidebar-section">
-        <div class="InputContainer">
-            <input wire:model.live= 'query' placeholder="Search" id="input" class="input" name="text"
-                type="text" />
+    <div class="brutalist-sidebar__section">
+        <div class="brutalist-search">
+            <input wire:model.live= 'query' placeholder="Search" id="input" class="brutalist-search__input"
+                name="text" type="text" />
 
-            <label class="labelforsearch" for="input">
-                <i class="searchIcon bi bi-search"></i>
+            <label class="brutalist-label" for="input">
+                <i class="brutalist-search__icon bi bi-search fs-5"></i>
             </label>
         </div>
-        <div class="contacts-list">
+        <div class="brutalist-sidebar__contacts-list">
             @if ($query == '')
-                <div class="empty-state">
-                    <p>Find someone to chat with</p>
+                <div class="brutalist-empty-state">
+                    <p>
+                        Find someone to chat with</p>
                 </div>
             @else
                 @foreach ($results as $result)
-                    <div class="search-result-item">
-                        <div class="search-user-info">
-                            <div class="contact-avatar">
-                                <img src="{{ getAvatar($result->name) }}" alt="{{ $result->name }}">
-                                <span class="status-indicator {{ $result->is_online ? 'online' : 'offline' }}"></span>
-                            </div>
-                            <div class="contact-info">
-                                <span class="contact-name">{{ $result->name }}</span>
-                                <span class="contact-status">
-                                    {{ $result->is_online ? 'Online' : 'Offline' }}
-                                </span>
+                    <div class="brutalist-user-info brutalist-flex brutalist-flex--between">
+                        <div class="brutalist-flex brutalist-flex--center">
+                            <img class="brutalist-user-info__avatar" src="{{ getAvatar($result->name) }}"
+                                alt="{{ $result->name }}">
+                            <div class="brutalist-user-info__details">
+                                <span class="brutalist-user-info__name">{{ $result->name }}</span>
+                                <span
+                                    class="brutalist-user-info__status">{{ $result->is_online ? 'Online' : 'Offline' }}</span>
                             </div>
                         </div>
                         @if ($this->isFriend($result))
-                            <button class="btn-already-friend" disabled>
-                                <i class="bi bi-check-circle"></i> Already Friends
+                            <button class="brutalist-btn brutalist-btn--secondary brutalist-btn--sm" disabled>
+                                <i class="bi bi-check-circle"></i>
                             </button>
                         @else
-                            <button wire:click="addFriend({{ $result->id }})" class="btn-add-friend">
-                                <i class="bi bi-person-plus"></i> Add
+                            <button wire:click="addFriend({{ $result->id }})" class="brutalist-btn brutalist-btn--sm">
+                                <i class="bi bi-person-plus"></i>
                             </button>
                         @endif
                     </div>
                 @endforeach
             @endif
         </div>
-        <div class="section-header">
-            <h4 class="section-title">Direct Messages</h4>
-            <label class="checkbox-container">
-                <input type="checkbox" wire:model.live="checkboxChecked">
-                <div class="line"></div>
-                <div class="line line-indicator"></div>
-            </label>
+        <div class="brutalist-sidebar__section-header">
+            <h4 class="brutalist-sidebar__section-title">Direct Messages</h4>
+            <div class="brutalist-toggle">
+                <input type="checkbox" id="hideFriendsToggle" wire:model.live="checkboxChecked">
+                <label for="hideFriendsToggle"></label>
+            </div>
         </div>
         <div class="contacts-list">
             @if ($checkboxChecked)
-                <div class="empty-state">
+                <div class="brutalist-empty-state">
                     <p>Friends hidden</p>
                 </div>
             @else
@@ -60,7 +57,7 @@
                         <livewire:friend-list :friend="$friend" :key="$friend->id" />
                     @endforeach
                 @else
-                    <div class="empty-state">
+                    <div class="brutalist-empty-state">
                         <p>There are no friends</p>
                     </div>
                 @endif

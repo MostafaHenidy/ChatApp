@@ -5,12 +5,14 @@ namespace App\Livewire;
 use App\Models\Group as ModelsGroup;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class Group extends Component
 {
     public $name;
     public $friends;
     public $selectedFriends = [];
+
     public function mount()
     {
         $this->friends = Auth::user()->friends()->get();
@@ -18,10 +20,8 @@ class Group extends Component
     public function toggleFriend($friendId)
     {
         if (in_array($friendId, $this->selectedFriends)) {
-            // Remove friend if already selected
             $this->selectedFriends = array_diff($this->selectedFriends, [$friendId]);
         } else {
-            // Add friend if not selected
             $this->selectedFriends[] = $friendId;
         }
     }
