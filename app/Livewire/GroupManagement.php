@@ -3,12 +3,20 @@
 namespace App\Livewire;
 
 use App\Models\GroupMember;
+use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+
 
 class GroupManagement extends Component
 {
+    use WithFileUploads;
+
     public $group;
+    #[Validate('image|max:1024')]
+    public $avatar;
     public $queryForSearchMember = '';
     public $queryForAddMember = '';
 
@@ -25,10 +33,10 @@ class GroupManagement extends Component
         } else {
             $this->groupPrivacy = true;
         }
-        if($this->group->admin_only_post = true){
-            $this->adminOnlyPosts = true ; 
-        }else{
-            $this->adminOnlyPosts = false ; 
+        if ($this->group->admin_only_post = true) {
+            $this->adminOnlyPosts = true;
+        } else {
+            $this->adminOnlyPosts = false;
         }
     }
     public function addMember($id)
@@ -84,6 +92,25 @@ class GroupManagement extends Component
         }
 
         $this->group->refresh();
+    }
+    public function uploadGroupAvatar()
+    {
+        $userId = Auth::id();
+
+        $isAdmin = GroupMember::where('group_id', $this->group->id)
+            ->where('user_id', $userId)
+            ->where('is_admin', true)
+            ->exists();
+
+        if ($this->avatar) {
+            $this->group->clearMediaCollection('groups.avatars');
+            $this->group
+                ->addMedia($this->avatar)
+                ->toMediaCollection('groups.avatars', 'public');
+
+            $this->dispatch('showSuccess', 'Group avatar updated successfully!');
+            $this->group->refresh();
+        }
     }
     public function render()
     {

@@ -2,7 +2,7 @@
     <div class="brutalist-sidebar__user-link">
         <div class="brutalist-user-info" style="justify-content: space-between; width: 100%;">
             <div style="display: flex; gap: 1rem; align-items: center;">
-                <img class="brutalist-user-info__avatar" src="{{ getAvatar(strtoupper($this->group->name)) }}"
+                <img class="brutalist-user-info__avatar" src="{{ getGroupAvatar(strtoupper($this->group->name)) }}"
                     alt="{{ $this->group->slug }}">
                 <div class="brutalist-user-info__details">
                     <h6 class="brutalist-user-info__name">{{ $this->group->name }}</h6>
@@ -25,8 +25,8 @@
                     @endif
                     <div class="brutalist-message__content">
                         <div class="brutalist-message__bubble">
-                            @if ($message->message)
-                                <p>{{ $message->message }}</p>
+                            @if ($message->body)
+                                <p>{{ $message->body }}</p>
                             @endif
                         </div>
                         <div class="brutalist-helper-text">
@@ -40,7 +40,7 @@
     @if (!$this->group->admin_only_post)
         <form id="messageForm" wire:submit ='sendMessage' class="message-form" enctype="multipart/form-data">
             <div class="brutalist-chat__input-area">
-                <input type="text" wire:model ='body' name="message" id="messageInput" class="brutalist-chat__input"
+                <input type="text" wire:model ='body' name="body" id="messageInput" class="brutalist-chat__input"
                     placeholder="Type a message..." autocomplete="off">
                 <button type="submit" class="brutalist-btn" id="sendButton">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"

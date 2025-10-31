@@ -7,10 +7,14 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Models\User;
 use App\Models\GroupMessage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Group extends Model
+class Group extends Model implements HasMedia
 {
-    use HasSlug;
+    use HasFactory, InteractsWithMedia, HasSlug;
+
     protected $guarded = ['id'];
     public function getSlugOptions(): SlugOptions
     {

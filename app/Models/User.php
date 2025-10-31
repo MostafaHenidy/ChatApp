@@ -11,10 +11,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Group;
 use App\Models\Message;
+use App\Notifications\CustomResetPassword;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes;
+    use HasFactory, Notifiable, InteractsWithMedia, SoftDeletes, CanResetPassword ,MustVerifyEmail;
 
     protected $guarded = ['id'];
 
@@ -96,5 +99,12 @@ class User extends Authenticatable implements HasMedia
             })
             ->latest()
             ->first();
+    }
+    /** ----------------------------
+     *  RESET PASSWORD NOTIFICATION
+     * ---------------------------- */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new CustomResetPassword($token));
     }
 }

@@ -4,136 +4,139 @@
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
-    <div class="container">
-        <a href="{{ route('front.index') }}" class="return-home"><i class="bi bi-arrow-left-short"></i></a>
+    <div class="brutalist-main-content">
+        <a href="{{ route('front.index') }}" class="brutalist-btn--icon brutalist-btn--sm brutalist-mb">
+            <i class="bi bi-arrow-left-short fs-3"></i>
+        </a>
         <!-- Profile Header -->
-        <div class="profile-header">
-            <div class="avatar-wrapper position-relative d-inline-block">
-                <img class="avatar" id="avatarPreview" src="{{ getAvatar(auth()->user()->name) }}"
-                    alt="{{ auth()->user()->name }}">
-                <!-- Hidden File Input -->
-                <input type="file" id="avatarUpload" name="avatar" class="d-none" accept="image/*">
-                <!-- Camera Button -->
-                <button type="button" class="camera-btn" title="Change profile picture" id="changeAvatarBtn">
-                    <i class="bi bi-camera-fill"></i>
-                </button>
-            </div>
-            <div class="profile-info mt-3">
-                <h1>{{ Auth::user()->name }}</h1>
-                @if (Auth::user()->email_verified_at == null)
-                    <div>
-                        <span>{{ Auth::user()->email }}</span>
-                        <i class="bi bi-patch-exclamation-fill text-warning"></i>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <p class="text-sm mt-2 text-gray-800">
-                            {{ __('Your email address is unverified.') }}
+        <div class="brutalist-sidebar__user-link brutalist-mb">
+            <div class="brutalist-user-info">
+                <div class="brutalist-avatar--lg">
+                    <img class="avatar" id="avatarPreview" src="{{ getAvatar(auth()->user()->name) }}"
+                        alt="{{ auth()->user()->name }}">
+                </div>
+                <div class="brutalist-user-info__details">
+                    <h1>{{ Auth::user()->name }}</h1>
+                    @if (Auth::user()->email_verified_at == null)
+                        <div>
+                            <span class="">{{ Auth::user()->email }}</span>
+                            <i class="bi bi-patch-exclamation-fill text-warning"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm mt-2 text-gray-800">
+                                {{ __('Your email address is unverified.') }}
 
-                            <button form="send-verification" type="button" class="btn btn-outline-primary btn-sm ms-2"
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Click here to verify your email address">
-                                <i class="bi bi-patch-check-fill"></i>
-                            </button>
-                        </p>
-                    </div>
-                @else
-                    <div>
-                        <span>{{ Auth::user()->email }}</span>
-                        <i class="bi bi-patch-check-fill text-primary"></i>
-                    </div>
-                @endif
+                                <button form="send-verification" type="submit"
+                                    class="brutalist-btn--icon brutalist-btn--sm" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Click here to verify your email address">
+                                    <i class="bi bi-patch-check-fill"></i>
+                                </button>
+                            </p>
+                        </div>
+                    @else
+                        <div>
+                            <span>{{ Auth::user()->email }}</span>
+                            <i class="bi bi-patch-check-fill text-primary"></i>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('profile')">Edit Profile</button>
-            <button class="nav-tab" onclick="switchTab('password')">Update Password</button>
-            <button class="nav-tab" onclick="switchTab('delete')">Delete Account</button>
+        <div class="nav-tabs brutalist-mb">
+            <button class="brutalist-navbar__link" onclick="switchTab('profile')">Edit Profile</button>
+            <button class="brutalist-navbar__link" onclick="switchTab('password')">Update Password</button>
+            <button class="brutalist-navbar__link" onclick="switchTab('delete')">Delete Account</button>
         </div>
 
         <!-- Tab Content -->
         <div class="tab-content">
             <!-- Edit Profile Tab -->
             <div id="profile" class="tab-pane active">
-                <h2 style="margin-bottom: 20px; color: #2c3e50;">Edit Your Profile</h2>
+                <h2 class="brutalist-mb">Edit Your Profile</h2>
                 <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6"
                     enctype="multipart/form-data">
                     @csrf
                     @method('patch')
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="name">Full Name</label>
-                        <input class="form-control" type="text" id="name" name="name"
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label" for="name">Full Name</label>
+                        <input class="brutalist-input" type="text" id="name" name="name"
                             value="{{ auth()->user()->name }}" placeholder="Enter your full name">
-                        <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                        <x-input-error class="brutalist-input--error" :messages="$errors->get('name')" />
                     </div>
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="email">Email Address</label>
-                        <input class="form-control" type="email" name="email" id="email"
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label" for="email">Email Address</label>
+                        <input class="brutalist-input" type="email" name="email" id="email"
                             value="{{ auth()->user()->email }}" placeholder="Enter your email">
-                        <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                        <x-input-error class="brutalist-input--error" :messages="$errors->get('email')" />
                     </div>
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="phone">phone</label>
-                        <input class="form-control " name="phone"id="phone" value="{{ auth()->user()->phone }}"
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label" for="phone">phone</label>
+                        <input class="brutalist-input " name="phone"id="phone" value="{{ auth()->user()->phone }}"
                             placeholder="+201234567890">
-                        <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                        <x-input-error class="brutalist-input--error" :messages="$errors->get('phone')" />
                     </div>
-                    <div class="form-group mt-3">
-                        <label for="avatar">Profile Picture</label>
-                        <input type="file" name="avatar" id="avatar" class="form-control" accept="image/*">
-                        <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+                    <div class="brutalist-file-upload">
+
+                        <label class="brutalist-file-upload__label" for="avatar">
+                            <div class="brutalist-file-upload__text">Drag files here or click to upload</div>
+                            <div class="brutalist-file-upload__hint">Supported formats: JPG, PNG, PDF (Max 10MB)</div>
+                        </label>
+                        <input type="file" name="avatar" id="avatar" class="brutalist-file-upload__input"
+                            accept="image/*">
+                        <x-input-error class="brutalist-input--error" :messages="$errors->get('avatar')" />
                     </div>
-                    <div class="form-actions">
-                        <button type="cancel" class="btn btn-secondary">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <div class="brutalist-form-actions">
+                        <button type="cancel" class="brutalist-btn brutalist-btn--secondary">Cancel</button>
+                        <button type="submit" class="brutalist-btn">Save Changes</button>
                     </div>
                 </form>
             </div>
 
             <!-- Update Password Tab -->
             <div id="password" class="tab-pane">
-                <h2 style="margin-bottom: 20px; color: #2c3e50;">Update Password</h2>
+                <h2 class="brutalist-mb">Update Password</h2>
                 <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
                     @csrf
                     @method('put')
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="current_password">Current Password</label>
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label" for="current_password">Current Password</label>
                         <div class="input-group">
-                            <input type="password" name="current_password" class="form-control password-input"
-                                id="current_password" placeholder="Enter current password">
-                            <button class="input-group-text toggle-password" type="button" id="togglePassword">
+                            <input type="password" name="current_password" class="brutalist-input" id="current_password"
+                                placeholder="Enter current password">
+                            <button class="brutalist-btn--icon brutalist-btn toggle-password" type="button">
                                 <i class="bi bi-eye-slash"></i>
                             </button>
                         </div>
                         <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                     </div>
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="password">New Password</label>
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label mt-2" for="password">New Password</label>
                         <div class="input-group">
-                            <input type="password" name="password" class="form-control password-input" id="password"
+                            <input type="password" name="password" class="brutalist-input" id="new_password"
                                 placeholder="Enter new password">
-                            <button class="input-group-text toggle-password" type="button" id="togglePassword">
+                            <button class="brutalist-btn--icon brutalist-btn toggle-password" type="button">
                                 <i class="bi bi-eye-slash"></i>
                             </button>
                         </div>
                         <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-
                     </div>
-                    <div class="form-group">
-                        <label class="form-label mt-2" for="password_confirmation">Confirm New Password</label>
+
+                    <div class="brutalist-form-group">
+                        <label class="brutalist-label mt-2" for="password_confirmation">Confirm New Password</label>
                         <div class="input-group">
-                            <input type="password" name="password_confirmation" class="form-control password-input"
+                            <input type="password" name="password_confirmation" class="brutalist-input password-input"
                                 id="password_confirmation" placeholder="Confirm new password">
-                            <button class="input-group-text toggle-password" type="button" id="togglePassword">
+                            <button class="brutalist-btn--icon brutalist-btn toggle-password" type="button">
                                 <i class="bi bi-eye-slash"></i>
                             </button>
                         </div>
                         <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-secondary">Cancel</button>
-                        <button type="cancel" class="btn btn-primary">Update Password</button>
+                    <div class="brutalist-form-actions">
+                        <button type="submit" class="brutalist-btn brutalist-btn--secondary">Cancel</button>
+                        <button type="cancel" class="brutalist-btn">Update Password</button>
                     </div>
                 </form>
             </div>
@@ -141,27 +144,31 @@
             <!-- Delete Account Tab -->
             <div id="delete" class="tab-pane">
                 <div class="delete-section">
-                    <div class="bg-danger">
-                        <h3>Delete Your Account !</h3>
-                        <p>Once your account is deleted, all of its resources and data will be permanently deleted. </p>
+                    <div class="brutalist-alert brutalist-alert--danger">
+                        <i class="bi bi-x-square-fill brutalist-alert__icon"></i>
+                        <div class="brutalist-alert__content">
+                            <h2 class="brutalist-alert__title">Delete Your Account !</h2>
+                            <p class="brutalist-alert__message">Once your account is deleted, all of its resources and data
+                                will be permanently deleted. </p>
+                        </div>
                     </div>
                     <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
                         @csrf
                         @method('delete')
-                        <div class="form-group">
-                            <label class="form-label mt-2" for="confirm-delete">Type your password to confirm</label>
+                        <div class="brutalist-form-group">
+                            <label class="brutalist-label mt-2" for="confirm-delete">Type your password to confirm</label>
                             <div class="input-group">
-                                <input type="password" name="password" class="form-control password-input"
+                                <input type="password" name="password" class="brutalist-input password-input"
                                     id="password" placeholder="Enter new password">
-                                <button class="input-group-text toggle-password" type="button" id="togglePassword">
+                                <button class="brutalist-btn--icon brutalist-btn toggle-password" type="button">
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
                             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                         </div>
-                        <div class="form-actions">
-                            <button type="cancel" class="btn btn-secondary">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Delete
+                        <div class="brutalist-form-actions">
+                            <button type="cancel" class="brutalist-btn brutalist-btn--secondary">Cancel</button>
+                            <button type="submit" class="brutalist-btn brutalist-btn--accent">Delete
                                 Account</button>
                         </div>
                     </form>
@@ -178,7 +185,8 @@
             tabPanes.forEach(pane => pane.classList.remove('active'));
 
             // Remove active class from all nav tabs
-            const navTabs = document.querySelectorAll('.nav-tab');
+            // FIX 2: Corrected selector from '.nav-tab' to '.brutalist-navbar__link'
+            const navTabs = document.querySelectorAll('.brutalist-navbar__link');
             navTabs.forEach(tab => tab.classList.remove('active'));
 
             // Show selected tab pane
@@ -187,10 +195,6 @@
             // Add active class to clicked nav tab
             event.target.classList.add('active');
         }
-        // Handle camera button click → open file dialog
-        document.getElementById('changeAvatarBtn').addEventListener('click', function() {
-            document.getElementById('avatar').click();
-        });
 
         // Preview selected image (works for the same input)
         document.getElementById('avatar').addEventListener('change', function(event) {
@@ -205,6 +209,7 @@
         });
     </script>
     <script>
+        // Tooltip script (unchanged, looks correct)
         document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -213,36 +218,27 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toastLiveExample = document.getElementById('liveToast')
-
-            if (toastTrigger) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-                toastTrigger.addEventListener('click', () => {
-                    toastBootstrap.show();
-                    setTimeout(() => {
-                        toastBootstrap.hide();
-                    }, 2000);
-                })
-            }
-        });
-    </script>
-    <script>
+        // Password toggle script
         document.addEventListener("DOMContentLoaded", function() {
             const togglePasswordButtons = document.querySelectorAll(".toggle-password");
 
             togglePasswordButtons.forEach(button => {
                 button.addEventListener("click", function() {
+
+                    // FIX 5: Corrected selector from '.brutalist-input-group' to '.input-group'
+                    // to match the HTML structure.
                     const passwordInput = this.closest('.input-group').querySelector(
-                        '.password-input');
+                        'input');
                     const icon = this.querySelector('i');
 
-                    const type = passwordInput.getAttribute("type") === "password" ? "text" :
-                        "password";
-                    passwordInput.setAttribute("type", type);
+                    if (passwordInput) { // Check that we actually found an input
+                        const type = passwordInput.getAttribute("type") === "password" ? "text" :
+                            "password";
+                        passwordInput.setAttribute("type", type);
 
-                    icon.classList.toggle("bi-eye");
-                    icon.classList.toggle("bi-eye-slash");
+                        icon.classList.toggle("bi-eye");
+                        icon.classList.toggle("bi-eye-slash");
+                    }
                 });
             });
         });

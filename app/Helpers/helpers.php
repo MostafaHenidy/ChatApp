@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Group;
 use App\Models\User;
 use Laravolt\Avatar\Facade as Avatar;
 
@@ -10,6 +11,18 @@ function getAvatar($name)
     if ($user && $user->getFirstMediaUrl('avatars')) {
         // Always returns a full public URL like /storage/8/18.png
         return $user->getFirstMediaUrl('avatars');
+    }
+
+    // Fallback: generate default avatar as base64
+    return Avatar::create($name)->toBase64();
+}
+function getGroupAvatar($name)
+{
+    $group = Group::where('name', $name)->first();
+
+    if ($group && $group->getFirstMediaUrl('groups.avatars')) {
+        // Always returns a full public URL like /storage/8/18.png
+        return $group->getFirstMediaUrl('groups.avatars');
     }
 
     // Fallback: generate default avatar as base64

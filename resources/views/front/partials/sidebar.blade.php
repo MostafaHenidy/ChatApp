@@ -36,8 +36,8 @@
                         </a>
                     </li>
                     <li>
-                        <button type="button" class="brutalist-menu-toggle__link" data-bs-toggle="modal"
-                            data-bs-target="#NotificationsModal">
+                        <button type="button" class="brutalist-menu-toggle__link"
+                            data-modal-trigger="NotificationsModal">
                             <i class="bi bi-bell"></i>
                             <span>Notifications</span>
                         </button>
@@ -74,7 +74,7 @@
                     <a class="brutalist-sidebar__group-link {{ request()->routeIs('front.group') && request()->id == $group->id ? 'brutalist-sidebar__group-link--active' : '' }}"
                         href="{{ route('front.group', ['id' => $group->id]) }}">
                         <div class="brutalist-user-info">
-                            <img src="{{ getAvatar(strtoupper($group->name)) }}" alt="{{ $group->name }}"
+                            <img src="{{ getGroupAvatar(strtoupper($group->name)) }}" alt="{{ $group->name }}"
                                 class="brutalist-user-info__avatar">
                             <div class="brutalist-user-info__details">
                                 <span class="brutalist-user-info__name">{{ $group->name }}</span>

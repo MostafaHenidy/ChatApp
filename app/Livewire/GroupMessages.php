@@ -22,17 +22,7 @@ class GroupMessages extends Component
     public $messages;
     public $body;
     public $conversation;
-    // public function mount()
-    // {
-    //     $userIds = [Auth::id(), $this->friend->id];
-    //     sort($userIds);
 
-    //     $name = implode('and', $userIds);
-
-    //     $this->conversation = Conversation::firstOrCreate([
-    //         'name' => $name,
-    //     ]);
-    // }
     #[On('userSendGroupMessage')]
     public function refreshMessages()
     {
@@ -43,10 +33,15 @@ class GroupMessages extends Component
         $message = GroupMessage::create([
             'group_id' => $this->group->id,
             'user_id' => Auth::user()->id,
-            'message' => $this->body,
+            'body' => $this->body,
         ]);
         event(new UserSendGroupMessage($message));
-
+        if ($this->group->members && $this->group->members->count() > 0) {
+            foreach ($this->group->members as $member) {
+                if ($member && $member instanceof User)
+                    $member->notify(new UserSentMessage(Auth::user(), $message));
+            }
+        }
         $this->reset('body');
     }
     public function render()
